@@ -1,5 +1,4 @@
-# Fast-API-Starter-Template
-Starter Template for Fast API
+# HEX-H3-API
 
 # Setting up the virtual environment
 ## Setting up Virtual Environment
