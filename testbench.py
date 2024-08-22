@@ -1,4 +1,7 @@
 import h3
 
+print(h3.versions())
 
-print(h3.is_valid_cell("85283473fffffff"))
+
+print(h3.cell_to_local_ij("8928308280fffff", "8928308280bffff"))
+

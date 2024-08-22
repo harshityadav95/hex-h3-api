@@ -291,3 +291,108 @@ async def get_icosahedron_faces(h: str):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail="Internal server error")
+    
+
+
+@app.get("/v4/get_grid_disk/")
+async def get_grid_disk(origin: str, k: int):
+    """
+    Receives an H3 index and a k-ring size and returns the H3 indexes within the k-ring.
+
+    Args:
+        origin (str): The H3 index of the origin cell.
+        k (int): The k-ring size.
+
+    Returns:
+        list: A list of H3 indexes within the k-ring.
+
+    Raises:
+        HTTPException: If an invalid H3 index or k-ring size is provided.
+    """
+    try:
+        grid_disk = h3.grid_disk(origin, k)
+        return {"grid_disk": grid_disk}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+    
+## TODO grid_disk_distances
+
+@app.get("/v4/get_grid_distance/")
+async def get_grid_distance(h1: str, h2: str):
+    """
+    Calculates the grid distance between two H3 indexes.
+
+    Args:
+        h1 (str): The first H3 index.
+        h2 (str): The second H3 index.
+
+    Returns:
+        int: The grid distance between the two H3 indexes.
+
+    Raises:
+        HTTPException: If invalid H3 indexes are provided.
+    """
+    try:
+        distance = h3.grid_distance(h1, h2)
+        return {"distance": distance}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
+## Explore
+
+@app.get("/v4/get_cell_to_local_ij/")
+async def get_cell_to_local_ij(origin: str, h: str):
+    """
+    Converts an H3 index to local IJK coordinates relative to an origin index.
+
+    Args:
+        origin (str): The H3 index of the origin cell.
+        h (str): The H3 index to convert.
+
+    Returns:
+        dict: A dictionary containing the I and J coordinates.
+
+    Raises:
+        HTTPException: If invalid H3 indexes are provided.
+    """
+    try:
+        local_ij = h3.cell_to_local_ij(origin, h)
+        return {"i": local_ij[0], "j": local_ij[1]}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+## Explore 
+
+@app.get("/v4/get_local_ij_to_cell/")
+async def get_local_ij_to_cell(origin: str, i: int, j: int):
+    """
+    Converts local IJK coordinates to an H3 index relative to an origin index.
+
+    Args:
+        origin (str): The H3 index of the origin cell.
+        i (int): The I coordinate.
+        j (int): The J coordinate.
+
+    Returns:
+        str: The H3 index corresponding to the local IJK coordinates.
+
+    Raises:
+        HTTPException: If invalid input is provided.
+    """
+    try:
+        cell = h3.local_ij_to_cell(origin, i, j)
+        return {"h3_index": cell}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
