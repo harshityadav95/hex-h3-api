@@ -21,5 +21,5 @@ def test_get_local_ij_to_cell_invalid_i():
 
 def test_get_local_ij_to_cell_invalid_j():
     response = client.get("/v4/get_local_ij_to_cell/?origin=8928308280fffff&i=0&j=invalid_j_value")
-    assert response.status_code == 400
+    assert response.status_code == 422
     assert "detail" in response.json()

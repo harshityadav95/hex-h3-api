@@ -396,3 +396,131 @@ async def get_local_ij_to_cell(origin: str, i: int, j: int):
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
+## Hierarchical grid functions
+
+## TODO test for smaller resolution and upper resolution from given cell
+@app.get("/v4/get_cell_to_parent/")
+async def get_cell_to_parent(cell: str, parent_res: int):
+    """
+    Returns the parent index of the given H3 index at the specified resolution.
+
+    Args:
+        cell (str): The H3 index.
+        parent_res (int): The resolution of the parent index.
+
+    Returns:
+        str: The parent H3 index.
+
+    Raises:
+        HTTPException: If an invalid H3 index or resolution is provided.
+    """
+    try:
+        parent_cell = h3.cell_to_parent(cell, parent_res)
+        return {"parent_cell": parent_cell}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+    
+## TODO for higher resolution then cell provided
+
+@app.get("/v4/get_cell_to_children/")
+async def get_cell_to_children(cell: str, child_res: int):
+    """
+    Returns the children (descendants) of the given H3 index at the specified resolution.
+
+    Args:
+        cell (str): The H3 index.
+        child_res (int): The resolution of the child indexes.
+
+    Returns:
+        list: A list of H3 indexes representing the children.
+
+    Raises:
+        HTTPException: If an invalid H3 index or resolution is provided.
+    """
+    try:
+        children = h3.cell_to_children(cell, child_res)
+        return {"children": children}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
+@app.get("/v4/get_cell_to_center_child/")
+async def get_cell_to_center_child(cell: str, child_res: int):
+    """
+    Returns the center child (descendant) of the given H3 index at the specified resolution.
+
+    Args:
+        cell (str): The H3 index.
+        child_res (int): The resolution of the child index.
+
+    Returns:
+        str: The H3 index of the center child.
+
+    Raises:
+        HTTPException: If an invalid H3 index or resolution is provided.
+    """
+    try:
+        center_child = h3.cell_to_center_child(cell, child_res)
+        return {"center_child": center_child}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+## TOD) : API not avaialbe in v4
+# #  Explore for Navigation :
+
+# @app.get("/v4/get_cell_to_child_pos/")
+# async def get_cell_to_child_pos(child: str, parent_res: int):
+#     """
+#     Returns the position of the child H3 index relative to its parent at the specified resolution.
+
+#     Args:
+#         child (str): The H3 index of the child cell.
+#         parent_res (int): The resolution of the parent index.
+
+#     Returns:
+#         int: The child position (0-6).
+
+#     Raises:
+#         HTTPException: If an invalid H3 index or resolution is provided.
+#     """
+#     try:
+#         child_pos = h3.cell_to_child_pos(child, parent_res)
+#         return {"child_position": child_pos}
+#     except ValueError as e:
+#         raise HTTPException(status_code=400, detail=str(e))
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail="Internal server error")
+
+## TODO
+
+#cell_to_child_pos
+
+@app.post("/v4/compact_cells/")
+async def compact_cells(cells: list[str]):
+    """
+    Compacts the given list of H3 indexes.
+
+    Args:
+        cells (list): A list of H3 indexes.
+
+    Returns:
+        list: A list of compacted H3 indexes.
+
+    Raises:
+        HTTPException: If an invalid H3 index is provided.
+    """
+    try:
+
+        compacted_cells = h3.compact_cells(cells)
+
+        return {"compacted_cells": compacted_cells}
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Internal server error")
