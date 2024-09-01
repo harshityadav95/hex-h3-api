@@ -1,6 +1,6 @@
 # HEX-H3-API
 
-# Setting up the virtual environment
+
 ## Setting up Virtual Environment
 ```
 $ pip install virtualenv
@@ -14,6 +14,12 @@ $source .venv/bin/activate
 # Install dependencies
 $ pip install -r requirements.txt
 
+```
+
+## Run test case 
+To run all the test cases 
+```
+pytest 
 ```
 
 ## Setup FastAPI
