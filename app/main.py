@@ -8,9 +8,9 @@ import h3
 app = FastAPI()
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
 
 
 @app.get("/v4/latlng_to_cell/")

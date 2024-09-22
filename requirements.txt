@@ -1,4 +1,10 @@
-fastapi[standard]
 h3==4.0.0b3
 httpx
 pytest
+fastapi
+uvicorn
+gunicorn
+fastapi
+uvicorn
+gunicorn
+python-multipart
